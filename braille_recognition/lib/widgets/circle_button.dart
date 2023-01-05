@@ -1,15 +1,22 @@
+import 'package:braille_recognition/widgets/ontap_scale.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CircleButton extends StatelessWidget {
-  CircleButton({super.key, required this.size});
+  CircleButton({super.key, required this.size, required this.onTap});
   double size = 10;
+  Function onTap;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: size,
-        width: size,
+      height: size,
+      width: size,
+      child: OnTapScaleAndFade(
+        onTap: () {
+          onTap();
+        },
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(size / 2)),
@@ -20,8 +27,15 @@ class CircleButton extends StatelessWidget {
             ], tileMode: TileMode.clamp),
           ),
           child: Center(
-            child: Icon(Icons.forward, color: Colors.white,),
+            child: SvgPicture.asset(
+              "images/arrow_right.svg",
+              width: 20,
+              height: 20,
+              color: Colors.white,
+            ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
