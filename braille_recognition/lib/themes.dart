@@ -44,13 +44,13 @@ ThemeData lightTheme = ThemeData(
       fontSize: 20,
     ),
     titleMedium: TextStyle(
+      fontWeight: FontWeight.bold,
       color: Colors.black87,
-      fontWeight: FontWeight.w500,
       fontSize: 16,
     ),
     titleSmall: TextStyle(
       color: Colors.black87,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.bold,
       fontSize: 12,
     ),
     headlineSmall: TextStyle(
@@ -106,14 +106,20 @@ ThemeData darkTheme = ThemeData(
       color: Colors.white,
       fontSize: 20,
     ),
+    titleLarge: TextStyle(
+      fontFamily: "PoppinsBold",
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+    ),
     titleMedium: TextStyle(
       color: Colors.white,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.bold,
       fontSize: 16,
     ),
     titleSmall: TextStyle(
       color: Colors.white,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.bold,
       fontSize: 12,
     ),
     headlineSmall: TextStyle(
