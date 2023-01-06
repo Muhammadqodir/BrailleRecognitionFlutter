@@ -22,7 +22,7 @@ class _OnTapScaleAndFadeState extends State<OnTapScaleAndFade>
       lowerBound: 0.85,
       upperBound: 1.0,
       value: 1,
-      duration: Duration(milliseconds: 50),
+      duration: const Duration(milliseconds: 50),
     );
     _controllerA.addListener(() {
       setState(() {

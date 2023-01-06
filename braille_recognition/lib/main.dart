@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:braille_recognition/pages/main_page.dart';
 import 'package:braille_recognition/pages/onboarding.dart';
+import 'package:braille_recognition/pages/scan_page.dart';
 import 'package:braille_recognition/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -39,6 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MainPage();
+    return ScanPage();
   }
 }
