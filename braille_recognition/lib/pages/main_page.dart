@@ -195,8 +195,7 @@ class _MainPageState extends State<MainPage> {
                                   color: Colors.grey.withOpacity(0.1),
                                   spreadRadius: 4,
                                   blurRadius: 20,
-                                  offset: Offset(
-                                      0, 10), // changes position of shadow
+                                  offset: const Offset(0, 10), // changes position of shadow
                                 ),
                               ],
                             ),

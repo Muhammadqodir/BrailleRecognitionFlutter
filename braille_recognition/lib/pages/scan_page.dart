@@ -32,10 +32,10 @@ class _ScanPageState extends State<ScanPage> {
       //Make sure to await the call to detectEdge.
       bool success = await EdgeDetection.detectEdge(
         imagePath,
-        canUseGallery: true,
+        canUseGallery: false,
         androidScanTitle: 'Scanning', // use custom localizations for android
         androidCropTitle: 'Crop',
-        androidCropBlackWhiteTitle: 'Black White',
+        androidCropBlackWhiteTitle: 'adfasdfas',
         androidCropReset: 'Reset',
       );
     } catch (e) {
