@@ -19,14 +19,20 @@ class _ScanPageState extends State<ScanPage> {
   String? _path;
 
   void detectEnde() async {
-    // Check permissions and request its
     await Permission.camera.request();
 
-// Generate filepath for saving
+    bool isCameraGranted = await Permission.camera.request().isGranted;
+    
+    if (!isCameraGranted) {
+        return;
+    }
+
+
+    // Generate filepath for saving
     String imagePath = join((await getApplicationSupportDirectory()).path,
         "${(DateTime.now().millisecondsSinceEpoch / 1000).round()}.jpeg");
 
-// Use below code for live camera detection with option to select from gallery in the camera feed.
+    // Use below code for live camera detection with option to select from gallery in the camera feed.
 
     try {
       //Make sure to await the call to detectEdge.

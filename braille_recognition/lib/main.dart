@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:braille_recognition/pages/image_translation.dart';
 import 'package:braille_recognition/pages/main_page.dart';
 import 'package:braille_recognition/pages/onboarding.dart';
 import 'package:braille_recognition/pages/scan_page.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       home: const MyHomePage(title: 'Braille Recognition'),
     );
   }
@@ -40,6 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return ScanPage();
+    return MainPage();
   }
 }
