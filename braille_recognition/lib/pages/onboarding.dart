@@ -1,5 +1,7 @@
 import 'package:braille_recognition/fragments/onboarding_fragment.dart';
+import 'package:braille_recognition/pages/main_page.dart';
 import 'package:braille_recognition/widgets/circle_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -21,7 +23,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         controller: pageController,
         onPageChanged: (value) {
           setState(() {
-            percent = 0.25 * (value+1);
+            percent = 0.25 * (value + 1);
           });
         },
         children: [
@@ -68,7 +70,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
             CircleButton(
               size: 60,
               onTap: () {
-                pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.ease);
+                if (percent >= 0.75) {
+                  Navigator.pushReplacement(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => MainPage(),
+                      ));
+                } else {
+                  pageController.nextPage(
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.ease,
+                  );
+                }
               },
             )
           ],

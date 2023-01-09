@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:braille_recognition/pages/image_result.dart';
 import 'package:braille_recognition/pages/image_translation.dart';
 import 'package:braille_recognition/pages/main_page.dart';
 import 'package:braille_recognition/pages/onboarding.dart';
@@ -41,6 +43,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MainPage();
+    return ImageTranslationPage(image: File(""));
   }
 }

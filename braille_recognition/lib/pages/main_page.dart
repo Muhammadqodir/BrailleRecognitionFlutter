@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:braille_recognition/pages/image_result.dart';
 import 'package:braille_recognition/pages/image_translation.dart';
 import 'package:braille_recognition/widgets/custom_button.dart';
 import 'package:braille_recognition/widgets/ontap_scale.dart';
@@ -47,7 +48,7 @@ class _MainPageState extends State<MainPage> {
         Navigator.push(
           this.context,
           CupertinoPageRoute(
-            builder: ((context) => ImageTranslationPage(imagePath: imagePath!)),
+            builder: ((context) => ImageTranslationPage(image: File(imagePath??''))),
           ),
         );
       }
