@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:braille_recognition/api.dart';
+import 'package:braille_recognition/pages/image_viewer_page.dart';
 import 'package:braille_recognition/widgets/custom_button.dart';
 import 'package:braille_recognition/widgets/ontap_scale.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -53,15 +55,15 @@ class _ImageResultPageState extends State<ImageResultPage> {
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
-                      const SizedBox(
+                      MyButton(
+                        onTap: () {},
+                        child: SvgPicture.asset(
+                          "icons/share.svg",
+                          color: Colors.black,
+                        ),
                         width: 24,
-                      ),
-                      // MyButton(
-                      //   onTap: () {},
-                      //   child: SvgPicture.asset("images/notification.svg"),
-                      //   width: 24,
-                      //   height: 24,
-                      // )
+                        height: 24,
+                      )
                     ],
                   ),
                 ),
@@ -97,6 +99,18 @@ class _ImageResultPageState extends State<ImageResultPage> {
                                   OnTapScaleAndFade(
                                     onTap: () {
                                       // Translator.translate(widget.image);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: ((context) {
+                                            return ImageViewer(
+                                              imageProvider: NetworkImage(
+                                                widget.image_url,
+                                              ),
+                                            );
+                                          }),
+                                        ),
+                                      );
                                     },
                                     child: Hero(
                                       tag: 'image',

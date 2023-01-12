@@ -195,7 +195,7 @@ class _ImageTranslationPageState extends State<ImageTranslationPage>
                           children: [
                             AnimatedOpacity(
                               opacity: langSelected ? 0 : 1,
-                              duration: const Duration(milliseconds: 400),
+                              duration: const Duration(milliseconds: 200),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -229,7 +229,7 @@ class _ImageTranslationPageState extends State<ImageTranslationPage>
                             ),
                             AnimatedOpacity(
                               opacity: langSelected ? 1 : 0,
-                              duration: const Duration(milliseconds: 400),
+                              duration: const Duration(milliseconds: 200),
                               child: Column(
                                 children: [
                                   Text(

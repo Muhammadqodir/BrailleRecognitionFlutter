@@ -212,11 +212,6 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                   ),
-                  imagePath != null
-                      ? Image.file(
-                          File(imagePath ?? ''),
-                        )
-                      : SizedBox(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
