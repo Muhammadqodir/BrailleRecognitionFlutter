@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:braille_recognition/config.dart';
 import 'package:braille_recognition/multipart_requset.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:html/dom.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' show parse;
 
 class Translator{
   static Map<String, String> headers = {
@@ -24,7 +26,7 @@ class Translator{
     "Upgrade-Insecure-Requests": "1",
   };
 
-  static void translate(File image) async {
+  static void translate(File image, String lang, void Function(int bytes, int totalBytes) onProgress, Function onComplated) async {
     log("Image size before compressing:${image.lengthSync()}");
     File? compressed = await FlutterImageCompress.compressAndGetFile(
       image.absolute.path,
@@ -38,9 +40,7 @@ class Translator{
     var request = MultipartRequest(
       "POST",
       Uri.parse("$serverUrl/upload_photo/"),
-      onProgress: (bytes, totalBytes) {
-        log("progress $bytes => $totalBytes");
-      },
+      onProgress: onProgress,
     );
     request.files.add(
       http.MultipartFile.fromBytes(
@@ -49,16 +49,24 @@ class Translator{
         filename: "photo.jpg",
       ),
     );
-    request.fields['lang'] = 'RU';
+    request.fields['lang'] = lang;
     request.fields['has_public_confirm'] = 'False';
     request.fields['find_orientation'] = 'True';
     request.fields['process_2_sides'] = 'False';
     request.headers.addAll(headers);
     print("Sending resonse");
     var response = await request.send();
+    String res_url = response.headers["location"].toString();
     print(response.headers["location"]);
     print(response.isRedirect);
     print(await response.stream.bytesToString());
     print("Finish");
+    String html = (await http.get(Uri.parse(res_url))).body.toString();
+    // print(html);
+    Document doc = parse(html);
+    String res = doc.getElementsByClassName("read-card__text")[0].innerHtml.replaceAll("<br>", "\n").replaceAll("~?~", "?").replaceAll("&nbsp;", " ").replaceAll("  ", "").replaceAll("<tt>", "").replaceAll("</tt>", "");
+    String res_id = res_url.replaceAll("https://angelina-reader.ru/result/_", "").replaceAll("/", "");
+    String image_id = "${serverUrl}/static/data/results/$res_id.marked.jpg";
+    onComplated(res, image_id);
   }
 }

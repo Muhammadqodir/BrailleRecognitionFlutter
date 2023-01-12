@@ -1,5 +1,6 @@
 import 'package:braille_recognition/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 const primaryColor = Color(0xFF009AD1);
 const colorAccent = Color(0xFFE1F2F0);

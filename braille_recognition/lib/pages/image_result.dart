@@ -8,9 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ImageResultPage extends StatefulWidget {
-  ImageResultPage({Key? key, required this.image}) : super(key: key);
+  ImageResultPage(
+      {Key? key,
+      required this.image_url,
+      required this.original,
+      required this.result})
+      : super(key: key);
 
-  File image;
+  String image_url;
+  File original;
+  String result;
 
   @override
   State<ImageResultPage> createState() => _ImageResultPageState();
@@ -89,7 +96,7 @@ class _ImageResultPageState extends State<ImageResultPage> {
                                 children: [
                                   OnTapScaleAndFade(
                                     onTap: () {
-                                      Translator.translate(widget.image);
+                                      // Translator.translate(widget.image);
                                     },
                                     child: Hero(
                                       tag: 'image',
@@ -115,15 +122,12 @@ class _ImageResultPageState extends State<ImageResultPage> {
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(12),
                                           ),
-                                          child:
-                                              // Image.file(
-                                              //   widget.image,
-                                              //   width: 50,
-                                              //   height: 50,
-                                              //   fit: BoxFit.cover,
-                                              // ),
-                                              Image.network(
-                                            "https://media.istockphoto.com/id/1286898416/photo/braille-visually-impaired-writing-system-symbol-formed-out-of-white-spheres.jpg?s=612x612&w=0&k=20&c=c6C9wTwBDPvqYJuiNUJmaqga4cGAY-fy5E6gr24UYv8=",
+                                          child: FadeInImage(
+                                            image:
+                                                NetworkImage(widget.image_url),
+                                            placeholder: FileImage(
+                                              widget.original,
+                                            ),
                                             width: 50,
                                             height: 50,
                                             fit: BoxFit.cover,
@@ -184,10 +188,10 @@ class _ImageResultPageState extends State<ImageResultPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "test",
+                                    widget.result,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyMedium!
+                                        .bodyLarge!
                                         .copyWith(fontFamily: "Braille"),
                                   ),
                                   SizedBox(
@@ -238,7 +242,11 @@ class _ImageResultPageState extends State<ImageResultPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("test"),
+                                  Text(
+                                    widget.result,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
                                   const SizedBox(
                                     height: 12,
                                   ),
