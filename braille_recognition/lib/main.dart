@@ -8,8 +8,12 @@ import 'package:braille_recognition/pages/onboarding.dart';
 import 'package:braille_recognition/pages/scan_page.dart';
 import 'package:braille_recognition/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light) // Or Brightness.dark
+      );
   runApp(const MyApp());
 }
 
