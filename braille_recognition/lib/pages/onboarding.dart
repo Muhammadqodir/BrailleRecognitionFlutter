@@ -57,6 +57,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               radius: 39,
               animation: true,
               animateFromLastPercent: true,
+              animationDuration: 200,
               percent: percent,
               linearGradient: const LinearGradient(colors: [
                 Color(0xFFB3EAFF),
