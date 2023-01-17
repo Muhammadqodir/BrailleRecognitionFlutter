@@ -5,6 +5,7 @@ import 'package:braille_recognition/pages/image_result.dart';
 import 'package:braille_recognition/pages/image_translation.dart';
 import 'package:braille_recognition/widgets/bottom_navigation.dart';
 import 'package:braille_recognition/widgets/custom_button.dart';
+import 'package:braille_recognition/widgets/history_item.dart';
 import 'package:braille_recognition/widgets/ontap_scale.dart';
 import 'package:edge_detection/edge_detection.dart';
 import 'package:flutter/cupertino.dart';
@@ -276,120 +277,19 @@ class _ContentMainState extends State<ContentMain> {
                           ),
                         ],
                       ),
-                      OnTapScaleAndFade(
-                        onTap: () {},
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.1),
-                                spreadRadius: 4,
-                                blurRadius: 20,
-                                offset: const Offset(
-                                    0, 10), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Hello",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      "Hello",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(fontFamily: "Braille"),
-                                    ),
-                                    const SizedBox(
-                                      height: 12,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SvgPicture.asset(
-                                "icons/star.svg",
-                                height: 24,
-                                width: 24,
-                              )
-                            ],
-                          ),
-                        ),
+                      HistoryItem(
+                        result: "test",
+                        imageUrl: "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
+                        isFav: false,
                       ),
                       SizedBox(
                         height: 20,
                       ),
-                      OnTapScaleAndFade(
-                        onTap: () {},
-                        lowerBound: 0.95,
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.1),
-                                spreadRadius: 4,
-                                blurRadius: 20,
-                                offset:
-                                    Offset(0, 10), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Translate",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      "Translate",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(fontFamily: "Braille"),
-                                    ),
-                                    const SizedBox(
-                                      height: 12,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SvgPicture.asset(
-                                "icons/star.svg",
-                                height: 24,
-                                width: 24,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
+                      HistoryItem(
+                        result: "Braille test",
+                        imageUrl: "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
+                        isFav: false,
+                      ),
                     ],
                   ),
                 )

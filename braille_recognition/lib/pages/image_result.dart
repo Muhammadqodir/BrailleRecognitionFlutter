@@ -18,7 +18,7 @@ class ImageResultPage extends StatefulWidget {
       : super(key: key);
 
   String image_url;
-  File original;
+  File? original;
   String result;
 
   @override
@@ -139,9 +139,8 @@ class _ImageResultPageState extends State<ImageResultPage> {
                                           child: FadeInImage(
                                             image:
                                                 NetworkImage(widget.image_url),
-                                            placeholder: FileImage(
-                                              widget.original,
-                                            ),
+                                            placeholder: NetworkImage(
+                                                "https://www.zonebourse.com/images/loading_100.gif"),
                                             width: 50,
                                             height: 50,
                                             fit: BoxFit.cover,
@@ -201,12 +200,15 @@ class _ImageResultPageState extends State<ImageResultPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    widget.result,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(fontFamily: "Braille"),
+                                  Hero(
+                                    tag: "b_text",
+                                    child: Text(
+                                      widget.result,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(fontFamily: "Braille"),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 24,
@@ -256,10 +258,14 @@ class _ImageResultPageState extends State<ImageResultPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    widget.result,
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
+                                  Hero(
+                                    tag: "n_text",
+                                    child: Text(
+                                      widget.result,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 12,
