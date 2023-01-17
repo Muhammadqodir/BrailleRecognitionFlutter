@@ -336,6 +336,7 @@ class _ContentMainState extends State<ContentMain> {
                       ),
                       OnTapScaleAndFade(
                         onTap: () {},
+                        lowerBound: 0.95,
                         child: Container(
                           width: double.infinity,
                           padding: EdgeInsets.all(12),
