@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:braille_recognition/pages/image_result.dart';
 import 'package:braille_recognition/pages/image_translation.dart';
+import 'package:braille_recognition/widgets/bottom_navigation.dart';
 import 'package:braille_recognition/widgets/custom_button.dart';
 import 'package:braille_recognition/widgets/ontap_scale.dart';
 import 'package:edge_detection/edge_detection.dart';
@@ -48,7 +49,42 @@ class _MainPageState extends State<MainPage> {
         Navigator.push(
           this.context,
           CupertinoPageRoute(
-            builder: ((context) => ImageTranslationPage(image: File(imagePath??''))),
+            builder: ((context) =>
+                ImageTranslationPage(image: File(imagePath ?? ''))),
+          ),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void runGallery() async {
+    log("runGallery");
+    await Permission.camera.request();
+
+    bool isCameraGranted = await Permission.camera.request().isGranted;
+
+    // if (!isCameraGranted) {
+    //     return;
+    // }
+
+    imagePath = join((await getApplicationSupportDirectory()).path,
+        "${(DateTime.now().millisecondsSinceEpoch / 1000).round()}.jpeg");
+
+    try {
+      bool success = await EdgeDetection.detectEdgeFromGallery(
+        imagePath ?? "",
+        androidCropTitle: 'Crop',
+        androidCropBlackWhiteTitle: 'Crop',
+        androidCropReset: 'Reset',
+      );
+      if (success) {
+        Navigator.push(
+          this.context,
+          CupertinoPageRoute(
+            builder: ((context) =>
+                ImageTranslationPage(image: File(imagePath ?? ''))),
           ),
         );
       }
@@ -174,6 +210,7 @@ class _MainPageState extends State<MainPage> {
                               ),
                               Expanded(
                                 child: OnTapScaleAndFade(
+                                  onTap: runGallery,
                                   child: Column(
                                     children: [
                                       SvgPicture.asset("icons/import.svg"),
@@ -186,7 +223,6 @@ class _MainPageState extends State<MainPage> {
                                       ),
                                     ],
                                   ),
-                                  onTap: () {},
                                 ),
                               ),
                               Expanded(
@@ -369,6 +405,11 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigation(items: [
+        Item("title", "icons/home_outline.svg", "icons/home_gradient.svg"),
+        Item("title", "icons/star_outline.svg", "icons/star_gradient.svg"),
+        Item("title", "icons/profile_outline.svg", "icons/profile_gradient.svg")
+      ]),
     );
   }
 }
