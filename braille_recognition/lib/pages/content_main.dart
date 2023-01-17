@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:braille_recognition/language.dart';
 import 'package:braille_recognition/pages/image_result.dart';
 import 'package:braille_recognition/pages/image_translation.dart';
 import 'package:braille_recognition/widgets/bottom_navigation.dart';
@@ -10,11 +11,13 @@ import 'package:braille_recognition/widgets/ontap_scale.dart';
 import 'package:edge_detection/edge_detection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+const double _kItemExtent = 32.0;
 class ContentMain extends StatefulWidget {
   const ContentMain({super.key});
 
@@ -23,6 +26,7 @@ class ContentMain extends StatefulWidget {
 }
 
 class _ContentMainState extends State<ContentMain> {
+  _ContentMainState();
   String? imagePath;
   void runCamera() async {
     log("test");
@@ -94,6 +98,85 @@ class _ContentMainState extends State<ContentMain> {
     }
   }
 
+  int selectedCourse = 0;
+
+  List<Language> langs = [
+    Language("GR1 English", "EN"),
+    Language("GR2 English", "EN2"),
+    Language("Russian", "RU"),
+    Language("Uzbek", "UZ"),
+    Language("Uzbek(Latin)", "UZL"),
+    Language("Deutsch", "DE"),
+    Language("Greek", "GR"),
+    Language("Latvian", "LV"),
+    Language("Polish", "PL"),
+  ];
+  void showSelectLangDialog() {
+    FixedExtentScrollController extentScrollController =
+        FixedExtentScrollController(initialItem: selectedCourse);
+    showCupertinoModalPopup<void>(
+      context: this.context,
+      builder: (BuildContext context) => Container(
+        height: 250,
+        padding: const EdgeInsets.only(top: 6.0),
+        // The Bottom margin is provided to align the popup above the system navigation bar.
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        // Provide a background color for the popup.
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        // Use a SafeArea widget to avoid system overlaps.
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 150,
+                child: CupertinoPicker(
+                  scrollController: extentScrollController,
+                  magnification: 1.22,
+                  squeeze: 1.2,
+                  useMagnifier: false,
+                  looping: false,
+                  itemExtent: _kItemExtent,
+                  // This is called when selected item is changed.
+                  onSelectedItemChanged: (int selectedItem) {
+                    SystemSound.play(SystemSoundType.click);
+                    HapticFeedback.mediumImpact();
+                  },
+                  children:
+                      List<Widget>.generate(langs.length, (int index) {
+                    return Center(
+                      child: Text(
+                        langs[index].title,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    );
+                  }),
+                ),
+              ),
+              CupertinoButton(
+                child: Text(
+                  "Выбрать",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                onPressed: () {
+                  setState(() {
+                    selectedCourse = extentScrollController.selectedItem;
+                  });
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -144,28 +227,33 @@ class _ContentMainState extends State<ContentMain> {
                           ],
                           color: Color(0xFFA2E7FB),
                         ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Braille",
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.titleMedium,
+                        child: OnTapScaleAndFade(
+                          onTap: showSelectLangDialog,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Braille",
+                                  textAlign: TextAlign.center,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
                               ),
-                            ),
-                            SvgPicture.asset(
-                              "icons/swap.svg",
-                              height: 28,
-                              width: 28,
-                            ),
-                            Expanded(
-                              child: Text(
-                                "Cyliric",
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.titleMedium,
+                              SvgPicture.asset(
+                                "icons/swap.svg",
+                                height: 28,
+                                width: 28,
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                child: Text(
+                                  langs[selectedCourse].title,
+                                  textAlign: TextAlign.center,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Container(
@@ -279,7 +367,8 @@ class _ContentMainState extends State<ContentMain> {
                       ),
                       HistoryItem(
                         result: "test",
-                        imageUrl: "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
+                        imageUrl:
+                            "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
                         isFav: false,
                       ),
                       SizedBox(
@@ -287,7 +376,8 @@ class _ContentMainState extends State<ContentMain> {
                       ),
                       HistoryItem(
                         result: "Braille test",
-                        imageUrl: "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
+                        imageUrl:
+                            "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
                         isFav: false,
                       ),
                     ],
