@@ -20,8 +20,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 95,
-      padding: EdgeInsets.all(12),
+      height: 80,
+      padding: EdgeInsets.only(top: 12, left: 12, right: 12),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(

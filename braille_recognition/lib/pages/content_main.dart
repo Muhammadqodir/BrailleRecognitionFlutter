@@ -365,21 +365,21 @@ class _ContentMainState extends State<ContentMain> {
                           ),
                         ],
                       ),
-                      HistoryItem(
-                        result: "test",
-                        imageUrl:
-                            "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
-                        isFav: false,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      HistoryItem(
-                        result: "Braille test",
-                        imageUrl:
-                            "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
-                        isFav: false,
-                      ),
+                      // HistoryItem(
+                      //   result: "test",
+                      //   imageUrl:
+                      //       "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
+                      //   isFav: false,
+                      // ),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
+                      // HistoryItem(
+                      //   result: "Braille test",
+                      //   imageUrl:
+                      //       "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
+                      //   isFav: false,
+                      // ),
                     ],
                   ),
                 )
