@@ -66,7 +66,7 @@ class _ContentProfileState extends State<ContentProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Zulfiya Qodirova",
+                            "Anonymous User",
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
@@ -93,7 +93,7 @@ class _ContentProfileState extends State<ContentProfile> {
                           ),
                         ),
                         child: Text(
-                          "Edit",
+                          "Login",
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium!
@@ -108,11 +108,12 @@ class _ContentProfileState extends State<ContentProfile> {
                 ),
                 MyCard(
                   title: "Account",
+                  soonBadge: true,
                   child: Column(
                     children: [
                       SettingsItem(
                         icon: "icons/icon_profile.svg",
-                        title: "Persinal Data",
+                        title: "Personal Data",
                       ),
                       SettingsItem(
                         icon: "icons/icon_history.svg",
@@ -130,6 +131,7 @@ class _ContentProfileState extends State<ContentProfile> {
                 ),
                 MyCard(
                   title: "Notifications",
+                  soonBadge: true,
                   child: Column(
                     children: [
                       SettingsItem(
@@ -170,7 +172,7 @@ class _ContentProfileState extends State<ContentProfile> {
                   height: 24,
                 ),
                 Text(
-                  "Copyrights 2023\nFocus Group",
+                  "Focus Group\n© Copyrights 2023",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.black.withOpacity(0.6),
