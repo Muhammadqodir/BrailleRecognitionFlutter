@@ -17,6 +17,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const double _kItemExtent = 32.0;
 
@@ -170,6 +171,10 @@ class _ContentMainState extends State<ContentMain> {
                       ),
                 ),
                 onPressed: () {
+                  SharedPreferences.getInstance().then((value) {
+                    value.setDouble("defaultLang", extentScrollController.selectedItem.toDouble());
+                  });
+
                   setState(() {
                     selectedCourse = extentScrollController.selectedItem;
                   });
@@ -181,6 +186,20 @@ class _ContentMainState extends State<ContentMain> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    setDefaultLang();
+    super.initState();
+  }
+
+  void setDefaultLang() async{
+    final prefs = await SharedPreferences.getInstance();
+    int defaultLang = (prefs.getDouble("defaultLang") ?? 0).round();
+    setState(() {
+      selectedCourse = defaultLang;
+    });
   }
 
   @override
