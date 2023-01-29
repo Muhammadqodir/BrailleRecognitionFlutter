@@ -5,6 +5,7 @@ import 'package:braille_recognition/language.dart';
 import 'package:braille_recognition/pages/image_result.dart';
 import 'package:braille_recognition/pages/image_translation.dart';
 import 'package:braille_recognition/widgets/bottom_navigation.dart';
+import 'package:braille_recognition/widgets/card.dart';
 import 'package:braille_recognition/widgets/custom_button.dart';
 import 'package:braille_recognition/widgets/history_item.dart';
 import 'package:braille_recognition/widgets/ontap_scale.dart';
@@ -103,6 +104,7 @@ class _ContentMainState extends State<ContentMain> {
   List<Language> langs = [
     Language("GR1 English", "EN"),
     Language("GR2 English", "EN2"),
+    Language("Portuguese", "EN"),
     Language("Russian", "RU"),
     Language("Uzbek", "UZ"),
     Language("Uzbek(Latin)", "UZL"),
@@ -365,19 +367,37 @@ class _ContentMainState extends State<ContentMain> {
                           ),
                         ],
                       ),
+                      HistoryItem(
+                        result: "Braille Recongition",
+                        imageUrl:
+                            "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
+                        isFav: false,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      HistoryItem(
+                        result: "ответ: Илья бежал со скоростью 15 км/ч",
+                        imageUrl:
+                            "https://angelina-reader.ru/static/data/results/fce21c39b91749589df807fd81377a0d.marked.jpg",
+                        isFav: false,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      HistoryItem(
+                        result: "1)  300:5=60(с.); \n2)  300:15=20(с.);",
+                        imageUrl:
+                            "https://angelina-reader.ru/static/data/results/8395d4db3ff746e381dc2fd5cc65189d.marked.jpg",
+                        isFav: false,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       // HistoryItem(
-                      //   result: "test",
+                      //   result: "1)  300:5=60(с.);\n2)  300:15=20 (с.);\nответ: Илья бежал со скоростью 15 км/ч.",
                       //   imageUrl:
-                      //       "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
-                      //   isFav: false,
-                      // ),
-                      // SizedBox(
-                      //   height: 20,
-                      // ),
-                      // HistoryItem(
-                      //   result: "Braille test",
-                      //   imageUrl:
-                      //       "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
+                      //       "https://angelina-reader.ru/static/data/results/fce21c39b91749589df807fd81377a0d.marked.jpg",
                       //   isFav: false,
                       // ),
                     ],

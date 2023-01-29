@@ -42,12 +42,12 @@ class _ContentHistoryState extends State<ContentHistory> {
             child: ListView(
               padding: EdgeInsets.all(24),
               children: [
-                // HistoryItem(
-                //   result: "result",
-                //   imageUrl:
-                //       "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
-                //   isFav: true,
-                // )
+                HistoryItem(
+                  result: "result",
+                  imageUrl:
+                      "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
+                  isFav: true,
+                )
               ],
             ),
           ),

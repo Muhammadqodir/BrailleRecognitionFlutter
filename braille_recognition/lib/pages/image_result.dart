@@ -203,7 +203,7 @@ class _ImageResultPageState extends State<ImageResultPage> {
                                   Hero(
                                     tag: "b_text",
                                     child: Text(
-                                      widget.result,
+                                      widget.result.replaceAll("=", " "),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge!

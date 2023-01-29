@@ -121,13 +121,17 @@ class _HistoryItemState extends State<HistoryItem> {
                 children: [
                   Text(
                     widget.result,
+                    maxLines: 4,
+                    overflow: TextOverflow.fade,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(
                     height: 8,
                   ),
                   Text(
-                    widget.result,
+                    widget.result.replaceAll("=", " "),
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
