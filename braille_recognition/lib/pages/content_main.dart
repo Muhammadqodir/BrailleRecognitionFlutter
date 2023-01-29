@@ -19,6 +19,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 const double _kItemExtent = 32.0;
+
 class ContentMain extends StatefulWidget {
   const ContentMain({super.key});
 
@@ -55,8 +56,10 @@ class _ContentMainState extends State<ContentMain> {
         Navigator.push(
           this.context,
           CupertinoPageRoute(
-            builder: ((context) =>
-                ImageTranslationPage(image: File(imagePath ?? ''))),
+            builder: ((context) => ImageTranslationPage(
+                  image: File(imagePath ?? ''),
+                  lang_code: selectedCourse,
+                )),
           ),
         );
       }
@@ -89,8 +92,10 @@ class _ContentMainState extends State<ContentMain> {
         Navigator.push(
           this.context,
           CupertinoPageRoute(
-            builder: ((context) =>
-                ImageTranslationPage(image: File(imagePath ?? ''))),
+            builder: ((context) => ImageTranslationPage(
+                  image: File(imagePath ?? ''),
+                  lang_code: selectedCourse,
+                )),
           ),
         );
       }
@@ -146,8 +151,7 @@ class _ContentMainState extends State<ContentMain> {
                     SystemSound.play(SystemSoundType.click);
                     HapticFeedback.mediumImpact();
                   },
-                  children:
-                      List<Widget>.generate(langs.length, (int index) {
+                  children: List<Widget>.generate(langs.length, (int index) {
                     return Center(
                       child: Text(
                         langs[index].title,
@@ -372,6 +376,7 @@ class _ContentMainState extends State<ContentMain> {
                         imageUrl:
                             "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
                         isFav: false,
+                        language: Language("Russian", "RU"),
                       ),
                       SizedBox(
                         height: 20,
@@ -381,6 +386,7 @@ class _ContentMainState extends State<ContentMain> {
                         imageUrl:
                             "https://angelina-reader.ru/static/data/results/fce21c39b91749589df807fd81377a0d.marked.jpg",
                         isFav: false,
+                        language: Language("Russian", "RU"),
                       ),
                       SizedBox(
                         height: 20,
@@ -390,6 +396,7 @@ class _ContentMainState extends State<ContentMain> {
                         imageUrl:
                             "https://angelina-reader.ru/static/data/results/8395d4db3ff746e381dc2fd5cc65189d.marked.jpg",
                         isFav: false,
+                        language: Language("Russian", "RU"),
                       ),
                       SizedBox(
                         height: 20,

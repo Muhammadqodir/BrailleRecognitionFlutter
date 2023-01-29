@@ -1,3 +1,4 @@
+import 'package:braille_recognition/language.dart';
 import 'package:braille_recognition/widgets/custom_button.dart';
 import 'package:braille_recognition/widgets/history_item.dart';
 import 'package:braille_recognition/widgets/ontap_scale.dart';
@@ -47,6 +48,7 @@ class _ContentHistoryState extends State<ContentHistory> {
                   imageUrl:
                       "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
                   isFav: true,
+                  language: Language("Russian", "RU"),
                 )
               ],
             ),

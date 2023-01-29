@@ -12,21 +12,25 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:measured_size/measured_size.dart';
 
 class ImageTranslationPage extends StatefulWidget {
-  ImageTranslationPage({Key? key, required this.image}) : super(key: key);
+  ImageTranslationPage({Key? key, required this.image, required this.lang_code})
+      : super(key: key);
 
   File image;
 
   List<Language> langs = [
     Language("GR1 English", "EN"),
     Language("GR2 English", "EN2"),
+    Language("Portuguese", "EN"),
     Language("Russian", "RU"),
+    Language("Uzbek", "UZ"),
+    Language("Uzbek(Latin)", "UZL"),
     Language("Deutsch", "DE"),
     Language("Greek", "GR"),
     Language("Latvian", "LV"),
     Language("Polish", "PL"),
-    Language("Uzbek", "UZ"),
-    Language("Uzbek(Latin)", "UZL"),
   ];
+
+  int lang_code;
 
   @override
   State<ImageTranslationPage> createState() => _ImageTranslationPageState();
@@ -39,8 +43,6 @@ class _ImageTranslationPageState extends State<ImageTranslationPage>
 
   double image_height = 50;
   double percent = 0;
-
-  bool langSelected = false;
 
   @override
   void initState() {
@@ -56,6 +58,7 @@ class _ImageTranslationPageState extends State<ImageTranslationPage>
         animateScanAnimation(false);
       }
     });
+    translate(widget.langs[widget.lang_code].code);
     super.initState();
   }
 
@@ -75,26 +78,55 @@ class _ImageTranslationPageState extends State<ImageTranslationPage>
 
   GlobalKey key = GlobalKey();
 
-  void translate(String lang) {
+  void translate(String lang) async {
+    await Future.delayed(Duration(seconds: 1));
     final RenderBox renderBox =
         key.currentContext?.findRenderObject() as RenderBox;
     setState(() {
       image_height = renderBox.size.height + 60;
-      langSelected = true;
     });
     animateScanAnimation(false);
     Translator.translate(widget.image, lang, (bytes, totalBytes) {
-      setState(() {
-        percent = bytes/totalBytes;
-        log(percent.toString());
-      });
+      log((bytes / totalBytes).toString());
     }, (res, image) {
-        log(res);
-        log(image);
-      Navigator.pushReplacement(context, CupertinoPageRoute(builder: ((context) {
-        return ImageResultPage(image_url: image, original: widget.image, result: res,);
+      log(res);
+      log(image);
+      setState(() {
+        isFinish = true;
+      });
+      Navigator.pushReplacement(context,
+          CupertinoPageRoute(builder: ((context) {
+        return ImageResultPage(
+          image_url: image,
+          original: widget.image,
+          result: res,
+          lang: widget.langs[widget.lang_code],
+        );
       })));
     });
+    startCounter();
+  }
+
+  bool isFinish = false;
+  void startCounter() async {
+    while (percent < 0.90 && !isFinish) {
+      setState(() {
+        percent = percent + 0.001;
+      });
+      await Future.delayed(Duration(milliseconds: 5));
+    }
+    if (percent >= 0.90) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content:
+            Text("The process is taking longer than usual, please wait..."),
+      ));
+    }
+    while (percent < 0.98 && !isFinish) {
+      setState(() {
+        percent = percent + 0.0001;
+      });
+      await Future.delayed(Duration(milliseconds: 5));
+    }
   }
 
   @override
@@ -194,41 +226,7 @@ class _ImageTranslationPageState extends State<ImageTranslationPage>
                         Stack(
                           children: [
                             AnimatedOpacity(
-                              opacity: langSelected ? 0 : 1,
-                              duration: const Duration(milliseconds: 200),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Select language:",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                  const SizedBox(
-                                    height: 12,
-                                    width: double.infinity,
-                                  ),
-                                  Wrap(
-                                    spacing: 8,
-                                    runSpacing: 8,
-                                    runAlignment: WrapAlignment.center,
-                                    alignment: WrapAlignment.center,
-                                    children: widget.langs
-                                        .map(
-                                          (e) => CupertinoButton(
-                                            child: Text(e.title),
-                                            color: const Color(0xFF26A6D6),
-                                            padding: const EdgeInsets.all(12),
-                                            onPressed: () => translate(e.code),
-                                          ),
-                                        )
-                                        .toList(),
-                                  )
-                                ],
-                              ),
-                            ),
-                            AnimatedOpacity(
-                              opacity: langSelected ? 1 : 0,
+                              opacity: 1,
                               duration: const Duration(milliseconds: 200),
                               child: Column(
                                 children: [

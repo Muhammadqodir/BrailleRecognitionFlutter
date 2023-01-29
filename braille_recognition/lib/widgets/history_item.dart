@@ -1,3 +1,4 @@
+import 'package:braille_recognition/language.dart';
 import 'package:braille_recognition/pages/image_result.dart';
 import 'package:braille_recognition/pages/image_viewer_page.dart';
 import 'package:braille_recognition/widgets/ontap_scale.dart';
@@ -12,10 +13,12 @@ class HistoryItem extends StatefulWidget {
       {super.key,
       required this.result,
       required this.imageUrl,
+      required this.language,
       required this.isFav});
 
   String result;
   String imageUrl;
+  Language language;
   bool isFav;
 
   @override
@@ -46,6 +49,7 @@ class _HistoryItemState extends State<HistoryItem> {
                 image_url: widget.imageUrl,
                 original: null,
                 result: widget.result,
+                lang: widget.language,
               );
             }),
           ),

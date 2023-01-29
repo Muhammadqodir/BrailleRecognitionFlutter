@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:braille_recognition/api.dart';
+import 'package:braille_recognition/language.dart';
 import 'package:braille_recognition/pages/image_viewer_page.dart';
 import 'package:braille_recognition/widgets/custom_button.dart';
 import 'package:braille_recognition/widgets/ontap_scale.dart';
@@ -10,16 +11,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ImageResultPage extends StatefulWidget {
-  ImageResultPage(
-      {Key? key,
-      required this.image_url,
-      required this.original,
-      required this.result})
-      : super(key: key);
+  ImageResultPage({
+    Key? key,
+    required this.image_url,
+    required this.original,
+    required this.result,
+    required this.lang,
+  }) : super(key: key);
 
   String image_url;
   File? original;
   String result;
+  Language lang;
 
   @override
   State<ImageResultPage> createState() => _ImageResultPageState();
@@ -168,7 +171,7 @@ class _ImageResultPageState extends State<ImageResultPage> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      "Cyliric",
+                                      widget.lang.title,
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
