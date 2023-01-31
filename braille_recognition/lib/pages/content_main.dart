@@ -218,7 +218,11 @@ class _ContentMainState extends State<ContentMain> {
                   ),
                 ),
                 MyButton(
-                  onTap: () {},
+                  onTap: () {
+                    SharedPreferences.getInstance().then((value) => {
+                      value.setBool("isFirstOpen", true)
+                    });
+                  },
                   child: SvgPicture.asset("images/notification.svg"),
                   width: 24,
                   height: 24,

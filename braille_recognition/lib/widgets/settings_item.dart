@@ -13,11 +13,13 @@ class SettingsItem extends StatefulWidget {
       {super.key,
       required this.icon,
       required this.title,
+      required this.onTap,
       this.isSwitch = false});
 
   String title;
   String icon;
   bool isSwitch;
+  Function onTap;
 
   @override
   State<SettingsItem> createState() => _SettingsItemState();

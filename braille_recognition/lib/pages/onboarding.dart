@@ -4,6 +4,7 @@ import 'package:braille_recognition/widgets/circle_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingPage extends StatefulWidget {
   OnboardingPage({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             title: "Helps to comunicate",
             description:
                 "Translate Braille into one of the many languages available, and vice versa. Import images for translation directly from the device memory or take a photo",
-            illustration: "images/meeting.png",
+            illustration: "images/resize_3.png",
             illustrationBg: "images/onboarding_0.png",
           ),
           OnboardingFragment(
@@ -72,6 +73,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
               size: 60,
               onTap: () {
                 if (percent >= 0.75) {
+                  SharedPreferences.getInstance().then((value) {
+                    value.setBool("isFirstOpen", false);
+                  });
                   Navigator.pushReplacement(
                       context,
                       CupertinoPageRoute(
