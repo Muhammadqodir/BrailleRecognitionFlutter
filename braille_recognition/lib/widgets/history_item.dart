@@ -8,15 +8,17 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
+import 'package:sqflite/sqflite.dart';
 
 class HistoryItem extends StatefulWidget {
   HistoryItem(
       {super.key,
+      required this.id,
       required this.result,
       required this.imageUrl,
       required this.language,
       required this.isFav});
-
+  int id;
   String result;
   String imageUrl;
   int language;
@@ -35,6 +37,29 @@ class _HistoryItemState extends State<HistoryItem> {
     setState(() {
       isFav = !isFav;
     });
+    updateDog(HistoryModel(
+      widget.id,
+      widget.result,
+      widget.imageUrl,
+      widget.language,
+      isFav,
+    ));
+  }
+
+  void updateDog(HistoryModel dog) async {
+    // Get a reference to the database.
+    final db = await openDatabase('${await getDatabasesPath()}/history.db');
+    ;
+
+    // Update the given Dog.
+    await db.update(
+      'history',
+      dog.toMap(),
+      // Ensure that the Dog has a matching id.
+      where: 'id = ?',
+      // Pass the Dog's id as a whereArg to prevent SQL injection.
+      whereArgs: [dog.id],
+    );
   }
 
   @override
@@ -125,7 +150,7 @@ class _HistoryItemState extends State<HistoryItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.result,
+                    widget.result.substring(widget.result.indexOf("\n") + 1),
                     maxLines: 4,
                     overflow: TextOverflow.fade,
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -134,7 +159,9 @@ class _HistoryItemState extends State<HistoryItem> {
                     height: 8,
                   ),
                   Text(
-                    widget.result.replaceAll("=", " "),
+                    widget.result
+                        .substring(widget.result.indexOf("\n") + 1)
+                        .replaceAll("=", " "),
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     style: Theme.of(context)
@@ -166,52 +193,31 @@ class _HistoryItemState extends State<HistoryItem> {
   }
 }
 
-@HiveType(typeId: 0)
-class HistoryModel extends HiveObject {
-  @HiveField(0)
+class HistoryModel {
   String result;
-
-  @HiveField(1)
   String result_url;
-
-  @HiveField(2)
   int lang;
-
-  @HiveField(3)
   bool isFav;
+  int id;
 
-  HistoryModel(this.result, this.result_url, this.lang, this.isFav);
-}
+  HistoryModel(this.id, this.result, this.result_url, this.lang, this.isFav);
 
-class HistoryModelAdapter extends TypeAdapter<HistoryModel> {
-  @override
-  final typeId = 0;
-
-  @override
-  HistoryModel read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'res': result,
+      'res_url': result_url,
+      'lang': lang,
+      'isFav': isFav,
     };
-    return HistoryModel(
-      fields[0] as String,
-      fields[1] as String,
-      fields[2] as int,
-      fields[3] as bool,
-    );
   }
 
-  @override
-  void write(BinaryWriter writer, HistoryModel obj) {
-    writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.result)
-      ..writeByte(1)
-      ..write(obj.result_url)
-      ..writeByte(2)
-      ..write(obj.lang)
-      ..writeByte(3)
-      ..write(obj.isFav);
+  Map<String, dynamic> toMapNew() {
+    return {
+      'res': result,
+      'res_url': result_url,
+      'lang': lang,
+      'isFav': isFav,
+    };
   }
 }

@@ -2,11 +2,13 @@ import 'package:braille_recognition/language.dart';
 import 'package:braille_recognition/widgets/custom_button.dart';
 import 'package:braille_recognition/widgets/history_item.dart';
 import 'package:braille_recognition/widgets/ontap_scale.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
+import 'package:sqflite/sqflite.dart';
 
 class ContentHistory extends StatefulWidget {
   const ContentHistory({super.key});
@@ -23,14 +25,23 @@ class _ContentHistoryState extends State<ContentHistory> {
     super.initState();
   }
 
+  List<HistoryModel> items = [];
+
   void getData() async {
-    if(!await Hive.isBoxOpen("history")){
-      await Hive.openBox("history");
-    }
-    var box = await Hive.box('history');
-    for (var i = 0; i < box.length; i++) {
-      print(box.getAt(i));
-    }
+    final db = await openDatabase('${await getDatabasesPath()}/history.db');
+
+    // Query the table for all The Dogs.
+    final List<Map<String, dynamic>> maps = await db.query('history');
+    items = List.generate(maps.length, (i) {
+      return HistoryModel(
+        maps[i]['id'],
+        maps[i]['res'],
+        maps[i]['res_url'],
+        maps[i]['lang'],
+        maps[i]['isFav'] == 1,
+      );
+    });
+    setState(() {});
   }
 
   @override
@@ -60,16 +71,39 @@ class _ContentHistoryState extends State<ContentHistory> {
             ),
           ),
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(24),
-              children: [
-                HistoryItem(
-                  result: "result",
-                  imageUrl:
-                      "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
-                  isFav: true,
-                  language: 2,
-                )
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              slivers: [
+                CupertinoSliverRefreshControl(
+                  onRefresh: () async {
+                    getData();
+                  },
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        children: items
+                            .map((e) => e.isFav
+                                ? Padding(
+                                    padding: const EdgeInsets.only(bottom: 24),
+                                    child: HistoryItem(
+                                      id: e.id,
+                                      result: e.result,
+                                      imageUrl: e.result_url,
+                                      language: e.lang,
+                                      isFav: e.isFav,
+                                    ),
+                                  )
+                                : SizedBox())
+                            .toList(),
+                      ),
+                    ),
+                  ]),
+                ),
               ],
             ),
           ),

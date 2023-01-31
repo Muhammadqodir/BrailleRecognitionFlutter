@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:measured_size/measured_size.dart';
+import 'package:sqflite/sqflite.dart';
 
 class ImageTranslationPage extends StatefulWidget {
   ImageTranslationPage({Key? key, required this.image, required this.lang_code})
@@ -96,9 +97,7 @@ class _ImageTranslationPageState extends State<ImageTranslationPage>
       setState(() {
         isFinish = true;
       });
-      var box = await Hive.box('history');
-      await box.add(HistoryModel(res, image, widget.lang_code, false));
-
+      insertDog(HistoryModel(-1, res, image, widget.lang_code, false));
       Navigator.pushReplacement(context,
           CupertinoPageRoute(builder: ((context) {
         return ImageResultPage(
@@ -111,6 +110,22 @@ class _ImageTranslationPageState extends State<ImageTranslationPage>
     });
     startCounter();
   }
+
+  Future<void> insertDog(HistoryModel dog) async {
+    // Get a reference to the database.
+    final db = await openDatabase('${await getDatabasesPath()}/history.db');
+
+    // Insert the Dog into the correct table. You might also specify the
+    // `conflictAlgorithm` to use in case the same dog is inserted twice.
+    //
+    // In this case, replace any previous data.
+    await db.insert(
+      'history',
+      dog.toMapNew(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+  
 
   bool isFinish = false;
   void startCounter() async {

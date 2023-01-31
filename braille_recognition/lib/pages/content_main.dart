@@ -18,6 +18,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 const double _kItemExtent = 32.0;
 
@@ -105,6 +106,27 @@ class _ContentMainState extends State<ContentMain> {
     }
   }
 
+  List<HistoryModel> items = [];
+
+  void getData() async {
+    final db = await openDatabase('${await getDatabasesPath()}/history.db');
+
+    // Query the table for all The Dogs.
+    final List<Map<String, dynamic>> maps = await db.query('history');
+    items.clear();
+    items = List.generate(maps.length, (i) {
+      return HistoryModel(
+        maps[i]['id'],
+        maps[i]['res'],
+        maps[i]['res_url'],
+        maps[i]['lang'],
+        maps[i]['isFav'] == 1,
+      );
+    });
+    setState(() {});
+  }
+
+
   int selectedCourse = 0;
 
   List<Language> langs = [
@@ -172,7 +194,8 @@ class _ContentMainState extends State<ContentMain> {
                 ),
                 onPressed: () {
                   SharedPreferences.getInstance().then((value) {
-                    value.setDouble("defaultLang", extentScrollController.selectedItem.toDouble());
+                    value.setDouble("defaultLang",
+                        extentScrollController.selectedItem.toDouble());
                   });
 
                   setState(() {
@@ -191,10 +214,11 @@ class _ContentMainState extends State<ContentMain> {
   @override
   void initState() {
     setDefaultLang();
+    getData();
     super.initState();
   }
 
-  void setDefaultLang() async{
+  void setDefaultLang() async {
     final prefs = await SharedPreferences.getInstance();
     int defaultLang = (prefs.getDouble("defaultLang") ?? 0).round();
     setState(() {
@@ -219,9 +243,8 @@ class _ContentMainState extends State<ContentMain> {
                 ),
                 MyButton(
                   onTap: () {
-                    SharedPreferences.getInstance().then((value) => {
-                      value.setBool("isFirstOpen", true)
-                    });
+                    SharedPreferences.getInstance()
+                        .then((value) => {value.setBool("isFirstOpen", true)});
                   },
                   child: SvgPicture.asset("images/notification.svg"),
                   width: 24,
@@ -231,208 +254,203 @@ class _ContentMainState extends State<ContentMain> {
             ),
           ),
           Expanded(
-            child: ListView(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            topRight: Radius.circular(24),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xFFA2E7FB).withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 10,
-                              offset: const Offset(
-                                  0, 4), // changes position of shadow
-                            ),
-                          ],
-                          color: Color(0xFFA2E7FB),
-                        ),
-                        child: OnTapScaleAndFade(
-                          onTap: showSelectLangDialog,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "Braille",
-                                  textAlign: TextAlign.center,
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
-                                ),
-                              ),
-                              SvgPicture.asset(
-                                "icons/swap.svg",
-                                height: 28,
-                                width: 28,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  langs[selectedCourse].title,
-                                  textAlign: TextAlign.center,
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(24),
-                            bottomRight: Radius.circular(24),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xFFD5F3FB).withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 10,
-                              offset: const Offset(
-                                  0, 4), // changes position of shadow
-                            ),
-                          ],
-                          color: Color(0xFFD5F3FB),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: OnTapScaleAndFade(
-                                onTap: runCamera,
-                                child: Column(
-                                  children: [
-                                    SvgPicture.asset("icons/camera.svg"),
-                                    Text(
-                                      "Camera",
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: OnTapScaleAndFade(
-                                onTap: runGallery,
-                                child: Column(
-                                  children: [
-                                    SvgPicture.asset("icons/import.svg"),
-                                    Text(
-                                      "Import",
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: OnTapScaleAndFade(
-                                child: Column(
-                                  children: [
-                                    SvgPicture.asset("icons/edit.svg"),
-                                    Text(
-                                      "Keyboard",
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall,
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {},
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              slivers: [
+                CupertinoSliverRefreshControl(
+                  onRefresh: () async {
+                    getData();
+                  },
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      Row(
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: Text(
-                              "History",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(fontFamily: "PoppinBold"),
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(24),
+                                topRight: Radius.circular(24),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color(0xFFA2E7FB).withOpacity(0.5),
+                                  spreadRadius: 1,
+                                  blurRadius: 10,
+                                  offset: const Offset(
+                                      0, 4), // changes position of shadow
+                                ),
+                              ],
+                              color: Color(0xFFA2E7FB),
                             ),
-                          ),
-                          CupertinoButton(
-                            child: Opacity(
-                              opacity: 0.6,
-                              child: Text(
-                                "See more",
-                                style: Theme.of(context).textTheme.bodySmall,
+                            child: OnTapScaleAndFade(
+                              onTap: showSelectLangDialog,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Braille",
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                  ),
+                                  SvgPicture.asset(
+                                    "icons/swap.svg",
+                                    height: 28,
+                                    width: 28,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      langs[selectedCourse].title,
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            onPressed: () {},
+                          ),
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(24),
+                                bottomRight: Radius.circular(24),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color(0xFFD5F3FB).withOpacity(0.5),
+                                  spreadRadius: 1,
+                                  blurRadius: 10,
+                                  offset: const Offset(
+                                      0, 4), // changes position of shadow
+                                ),
+                              ],
+                              color: Color(0xFFD5F3FB),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: OnTapScaleAndFade(
+                                    onTap: runCamera,
+                                    child: Column(
+                                      children: [
+                                        SvgPicture.asset("icons/camera.svg"),
+                                        Text(
+                                          "Camera",
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: OnTapScaleAndFade(
+                                    onTap: runGallery,
+                                    child: Column(
+                                      children: [
+                                        SvgPicture.asset("icons/import.svg"),
+                                        Text(
+                                          "Import",
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: OnTapScaleAndFade(
+                                    child: Column(
+                                      children: [
+                                        SvgPicture.asset("icons/edit.svg"),
+                                        Text(
+                                          "Keyboard",
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: () {},
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                      HistoryItem(
-                        result: "Braille Recongition",
-                        imageUrl:
-                            "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
-                        isFav: false,
-                        language: 1,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "History",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(fontFamily: "PoppinBold"),
+                                ),
+                              ),
+                              CupertinoButton(
+                                child: Opacity(
+                                  opacity: 0.6,
+                                  child: Text(
+                                    "See more",
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                ),
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: items
+                                .map((e) => Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 24),
+                                      child: HistoryItem(
+                                        id: e.id,
+                                        result: e.result,
+                                        imageUrl: e.result_url,
+                                        language: e.lang,
+                                        isFav: e.isFav,
+                                      ),
+                                    ))
+                                .toList(),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      HistoryItem(
-                        result: "ответ: Илья бежал со скоростью 15 км/ч",
-                        imageUrl:
-                            "https://angelina-reader.ru/static/data/results/fce21c39b91749589df807fd81377a0d.marked.jpg",
-                        isFav: false,
-                        language: 0,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      HistoryItem(
-                        result: "1)  300:5=60(с.); \n2)  300:15=20(с.);",
-                        imageUrl:
-                            "https://angelina-reader.ru/static/data/results/8395d4db3ff746e381dc2fd5cc65189d.marked.jpg",
-                        isFav: false,
-                        language: 3,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      // HistoryItem(
-                      //   result: "1)  300:5=60(с.);\n2)  300:15=20 (с.);\nответ: Илья бежал со скоростью 15 км/ч.",
-                      //   imageUrl:
-                      //       "https://angelina-reader.ru/static/data/results/fce21c39b91749589df807fd81377a0d.marked.jpg",
-                      //   isFav: false,
-                      // ),
-                    ],
-                  ),
-                )
+                    )
+                  ]),
+                ),
               ],
             ),
           ),

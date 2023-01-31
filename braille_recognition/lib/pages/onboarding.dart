@@ -3,6 +3,7 @@ import 'package:braille_recognition/pages/main_page.dart';
 import 'package:braille_recognition/widgets/circle_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -71,11 +72,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
             ),
             CircleButton(
               size: 60,
-              onTap: () {
+              onTap: () async {
                 if (percent >= 0.75) {
                   SharedPreferences.getInstance().then((value) {
                     value.setBool("isFirstOpen", false);
                   });
+                  Hive.openBox("history");
                   Navigator.pushReplacement(
                       context,
                       CupertinoPageRoute(
