@@ -31,7 +31,11 @@ class _ContentHistoryState extends State<ContentHistory> {
     final db = await openDatabase('${await getDatabasesPath()}/history.db');
 
     // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> maps = await db.query('history');
+    final List<Map<String, dynamic>> maps = await db.query(
+      'history', where: 'isFav = ?',
+      // Pass the Dog's id as a whereArg to prevent SQL injection.
+      whereArgs: [true],
+    );
     items = List.generate(maps.length, (i) {
       return HistoryModel(
         maps[i]['id'],
@@ -41,6 +45,7 @@ class _ContentHistoryState extends State<ContentHistory> {
         maps[i]['isFav'] == 1,
       );
     });
+
     setState(() {});
   }
 
@@ -59,14 +64,14 @@ class _ContentHistoryState extends State<ContentHistory> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
-                MyButton(
-                  onTap: () {
-                    getData();
-                  },
-                  child: SvgPicture.asset("images/notification.svg"),
-                  width: 24,
-                  height: 24,
-                )
+                // MyButton(
+                //   onTap: () {
+                //     getData();
+                //   },
+                //   child: SvgPicture.asset("images/notification.svg"),
+                //   width: 24,
+                //   height: 24,
+                // )
               ],
             ),
           ),
@@ -84,24 +89,29 @@ class _ContentHistoryState extends State<ContentHistory> {
                 SliverList(
                   delegate: SliverChildListDelegate([
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Column(
-                        children: items
-                            .map((e) => e.isFav
-                                ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 24),
-                                    child: HistoryItem(
-                                      id: e.id,
-                                      result: e.result,
-                                      imageUrl: e.result_url,
-                                      language: e.lang,
-                                      isFav: e.isFav,
-                                    ),
-                                  )
-                                : SizedBox())
-                            .toList(),
-                      ),
-                    ),
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: items.length > 0
+                            ? Column(
+                                children: items
+                                    .map((e) => Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 24),
+                                          child: HistoryItem(
+                                            id: e.id,
+                                            result: e.result,
+                                            imageUrl: e.result_url,
+                                            language: e.lang,
+                                            isFav: e.isFav,
+                                          ),
+                                        ))
+                                    .toList(),
+                              )
+                            : Center(
+                                child: SvgPicture.asset(
+                                  "images/404.svg",
+                                  width: 200,
+                                ),
+                              )),
                   ]),
                 ),
               ],

@@ -34,12 +34,12 @@ class _ContentProfileState extends State<ContentProfile> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
-                MyButton(
-                  onTap: () {},
-                  child: SvgPicture.asset("images/notification.svg"),
-                  width: 24,
-                  height: 24,
-                )
+                // MyButton(
+                //   onTap: () {},
+                //   child: SvgPicture.asset("images/notification.svg"),
+                //   width: 24,
+                //   height: 24,
+                // )
               ],
             ),
           ),

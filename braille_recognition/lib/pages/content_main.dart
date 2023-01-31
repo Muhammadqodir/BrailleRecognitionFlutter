@@ -126,7 +126,6 @@ class _ContentMainState extends State<ContentMain> {
     setState(() {});
   }
 
-
   int selectedCourse = 0;
 
   List<Language> langs = [
@@ -241,15 +240,15 @@ class _ContentMainState extends State<ContentMain> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
-                MyButton(
-                  onTap: () {
-                    SharedPreferences.getInstance()
-                        .then((value) => {value.setBool("isFirstOpen", true)});
-                  },
-                  child: SvgPicture.asset("images/notification.svg"),
-                  width: 24,
-                  height: 24,
-                )
+                // MyButton(
+                //   onTap: () {
+                //     SharedPreferences.getInstance()
+                //         .then((value) => {value.setBool("isFirstOpen", true)});
+                //   },
+                //   child: SvgPicture.asset("images/notification.svg"),
+                //   width: 24,
+                //   height: 24,
+                // )
               ],
             ),
           ),
@@ -431,21 +430,28 @@ class _ContentMainState extends State<ContentMain> {
                               ),
                             ],
                           ),
-                          Column(
-                            children: items
-                                .map((e) => Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 24),
-                                      child: HistoryItem(
-                                        id: e.id,
-                                        result: e.result,
-                                        imageUrl: e.result_url,
-                                        language: e.lang,
-                                        isFav: e.isFav,
-                                      ),
-                                    ))
-                                .toList(),
-                          ),
+                          items.length > 0
+                              ? Column(
+                                  children: items
+                                      .map((e) => Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 24),
+                                            child: HistoryItem(
+                                              id: e.id,
+                                              result: e.result,
+                                              imageUrl: e.result_url,
+                                              language: e.lang,
+                                              isFav: e.isFav,
+                                            ),
+                                          ))
+                                      .toList(),
+                                )
+                              : Center(
+                                  child: SvgPicture.asset(
+                                    "images/404.svg",
+                                    width: 200,
+                                  ),
+                                )
                         ],
                       ),
                     )
