@@ -7,15 +7,21 @@ import 'package:braille_recognition/pages/main_page.dart';
 import 'package:braille_recognition/pages/onboarding.dart';
 import 'package:braille_recognition/pages/scan_page.dart';
 import 'package:braille_recognition/themes.dart';
+import 'package:braille_recognition/widgets/history_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
           statusBarBrightness: Brightness.light) // Or Brightness.dark
       );
+
   WidgetsFlutterBinding.ensureInitialized();
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive..init(appDocumentDirectory.path)..registerAdapter(HistoryModelAdapter());
   SharedPreferences.getInstance().then((value) {
     runApp(MyApp(isFirstOpen: value.getBool("isFirstOpen")??true,));
   },);

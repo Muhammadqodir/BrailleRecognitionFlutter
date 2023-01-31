@@ -399,7 +399,7 @@ class _ContentMainState extends State<ContentMain> {
                         imageUrl:
                             "https://angelina-reader.ru/static/data/results/1db592d18ac94e8ba592f017a6df2a28.marked.jpg",
                         isFav: false,
-                        language: Language("Russian", "RU"),
+                        language: 1,
                       ),
                       SizedBox(
                         height: 20,
@@ -409,7 +409,7 @@ class _ContentMainState extends State<ContentMain> {
                         imageUrl:
                             "https://angelina-reader.ru/static/data/results/fce21c39b91749589df807fd81377a0d.marked.jpg",
                         isFav: false,
-                        language: Language("Russian", "RU"),
+                        language: 0,
                       ),
                       SizedBox(
                         height: 20,
@@ -419,7 +419,7 @@ class _ContentMainState extends State<ContentMain> {
                         imageUrl:
                             "https://angelina-reader.ru/static/data/results/8395d4db3ff746e381dc2fd5cc65189d.marked.jpg",
                         isFav: false,
-                        language: Language("Russian", "RU"),
+                        language: 3,
                       ),
                       SizedBox(
                         height: 20,

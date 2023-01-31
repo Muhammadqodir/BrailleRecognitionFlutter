@@ -22,7 +22,21 @@ class ImageResultPage extends StatefulWidget {
   String image_url;
   File? original;
   String result;
-  Language lang;
+  int lang;
+
+
+  List<Language> langs = [
+    Language("GR1 English", "EN"),
+    Language("GR2 English", "EN2"),
+    Language("Portuguese", "EN"),
+    Language("Russian", "RU"),
+    Language("Uzbek", "UZ"),
+    Language("Uzbek(Latin)", "UZL"),
+    Language("Deutsch", "DE"),
+    Language("Greek", "GR"),
+    Language("Latvian", "LV"),
+    Language("Polish", "PL"),
+  ];
 
   @override
   State<ImageResultPage> createState() => _ImageResultPageState();
@@ -171,7 +185,7 @@ class _ImageResultPageState extends State<ImageResultPage> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      widget.lang.title,
+                                      widget.langs[widget.lang].title,
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme

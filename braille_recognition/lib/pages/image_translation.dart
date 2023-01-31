@@ -5,10 +5,12 @@ import 'package:braille_recognition/api.dart';
 import 'package:braille_recognition/language.dart';
 import 'package:braille_recognition/pages/image_result.dart';
 import 'package:braille_recognition/widgets/custom_button.dart';
+import 'package:braille_recognition/widgets/history_item.dart';
 import 'package:braille_recognition/widgets/scanner_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
 import 'package:measured_size/measured_size.dart';
 
 class ImageTranslationPage extends StatefulWidget {
@@ -88,19 +90,22 @@ class _ImageTranslationPageState extends State<ImageTranslationPage>
     animateScanAnimation(false);
     Translator.translate(widget.image, lang, (bytes, totalBytes) {
       log((bytes / totalBytes).toString());
-    }, (res, image) {
+    }, (res, image) async {
       log(res);
       log(image);
       setState(() {
         isFinish = true;
       });
+      var box = await Hive.box('history');
+      await box.add(HistoryModel(res, image, widget.lang_code, false));
+
       Navigator.pushReplacement(context,
           CupertinoPageRoute(builder: ((context) {
         return ImageResultPage(
           image_url: image,
           original: widget.image,
           result: res,
-          lang: widget.langs[widget.lang_code],
+          lang: widget.lang_code,
         );
       })));
     });

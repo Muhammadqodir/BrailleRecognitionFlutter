@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hive/hive.dart';
 
 class HistoryItem extends StatefulWidget {
   HistoryItem(
@@ -18,7 +19,7 @@ class HistoryItem extends StatefulWidget {
 
   String result;
   String imageUrl;
-  Language language;
+  int language;
   bool isFav;
 
   @override
@@ -162,5 +163,55 @@ class _HistoryItemState extends State<HistoryItem> {
         ),
       ),
     );
+  }
+}
+
+@HiveType(typeId: 0)
+class HistoryModel extends HiveObject {
+  @HiveField(0)
+  String result;
+
+  @HiveField(1)
+  String result_url;
+
+  @HiveField(2)
+  int lang;
+
+  @HiveField(3)
+  bool isFav;
+
+  HistoryModel(this.result, this.result_url, this.lang, this.isFav);
+}
+
+class HistoryModelAdapter extends TypeAdapter<HistoryModel> {
+  @override
+  final typeId = 0;
+
+  @override
+  HistoryModel read(BinaryReader reader) {
+    var numOfFields = reader.readByte();
+    var fields = <int, dynamic>{
+      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return HistoryModel(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as int,
+      fields[3] as bool,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, HistoryModel obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.result)
+      ..writeByte(1)
+      ..write(obj.result_url)
+      ..writeByte(2)
+      ..write(obj.lang)
+      ..writeByte(3)
+      ..write(obj.isFav);
   }
 }

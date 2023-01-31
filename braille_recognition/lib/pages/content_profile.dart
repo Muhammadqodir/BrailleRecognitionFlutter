@@ -2,10 +2,14 @@ import 'package:braille_recognition/widgets/card.dart';
 import 'package:braille_recognition/widgets/custom_button.dart';
 import 'package:braille_recognition/widgets/ontap_scale.dart';
 import 'package:braille_recognition/widgets/settings_item.dart';
+import 'package:email_launcher/email_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ContentProfile extends StatefulWidget {
   const ContentProfile({super.key});
@@ -77,7 +81,11 @@ class _ContentProfileState extends State<ContentProfile> {
                       ),
                     ),
                     OnTapScaleAndFade(
-                      onTap: () {},
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Soon!'),
+                        ));
+                      },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 32, vertical: 8),
@@ -114,14 +122,17 @@ class _ContentProfileState extends State<ContentProfile> {
                       SettingsItem(
                         icon: "icons/icon_profile.svg",
                         title: "Personal Data",
+                        onTap: () {},
                       ),
                       SettingsItem(
                         icon: "icons/icon_history.svg",
                         title: "History",
+                        onTap: () {},
                       ),
                       SettingsItem(
                         icon: "icons/icon_stat.svg",
                         title: "Premium account",
+                        onTap: () {},
                       ),
                     ],
                   ),
@@ -138,6 +149,7 @@ class _ContentProfileState extends State<ContentProfile> {
                         icon: "icons/icon_notifications.svg",
                         title: "Pop-up Notifications",
                         isSwitch: true,
+                        onTap: () {},
                       ),
                     ],
                   ),
@@ -152,18 +164,34 @@ class _ContentProfileState extends State<ContentProfile> {
                       SettingsItem(
                         icon: "icons/icon_message.svg",
                         title: "Contact Us",
+                        onTap: () {
+                          launchUrlString(
+                              "https://abduvoitov.uz/braille_contact.html");
+                        },
                       ),
                       SettingsItem(
                         icon: "icons/icon_privacy.svg",
                         title: "Privacy Policy",
+                        onTap: () {
+                          launchUrlString(
+                              "https://abduvoitov.uz/braille_pp.html");
+                        },
                       ),
                       SettingsItem(
                         icon: "icons/icon_settings.svg",
                         title: "Settings",
+                        onTap: () {
+                          launchUrlString(
+                              "mailto:m.abduvoitov@icloud.com?subject=Braille Recognition");
+                        },
                       ),
                       SettingsItem(
                         icon: "icons/icon_community.svg",
                         title: "Share",
+                        onTap: () {
+                          Share.share(
+                              'check out my website https://example.com');
+                        },
                       ),
                     ],
                   ),

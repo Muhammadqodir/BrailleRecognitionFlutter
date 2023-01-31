@@ -29,7 +29,9 @@ class _SettingsItemState extends State<SettingsItem> {
   @override
   Widget build(BuildContext context) {
     return OnTapScaleAndFade(
-      onTap: () {},
+      onTap: (){
+        widget.onTap();
+      },
       lowerBound: 0.95,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6),
