@@ -190,7 +190,7 @@ class _ContentProfileState extends State<ContentProfile> {
                         title: "Share",
                         onTap: () {
                           Share.share(
-                              'check out my website https://example.com');
+                              'Check app http://braillerecognition.qodir.xyz/');
                         },
                       ),
                     ],
